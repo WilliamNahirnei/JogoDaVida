@@ -85,27 +85,27 @@
 
         let live = setInterval(async function () {
             tabuleiroAux = []
-            living=false
+            living = false
             for (let x = 0; x < SIZE; x++) {
                 let novaLinha = []
                 for (let y = 0; y < SIZE; y++) {
                     await tabuleiro[x][y].checkNeighbors(tabuleiro)
                     const newStatus = await tabuleiro[x][y].calculateNewStatus()
                     novaLinha.push(new element(tabuleiro[x][y].id, x, y, newStatus))
-                     
+
                     trocarCor(tabuleiro[x][y].id, newStatus)
 
                     if (tabuleiro[x][y].getStatus() != newStatus)
-                        living=true
+                        living = true
 
                 }
                 tabuleiroAux.push(novaLinha)
             }
             tabuleiro = tabuleiroAux
-            if(!living){
+            if (!living) {
                 clearInterval(live)
                 alert("O jogo acabou")
-            } 
+            }
         }, 500)
 
     }

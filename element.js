@@ -50,8 +50,8 @@ class element {
         for (let x = x_start; x <= x_end; x++) {
             for (let y = y_start; y <= y_end; y++) {
 
-                if (x != this.x || y != this.y){
-                    if (await board[x][y].getStatus() == true){
+                if (x != this.x || y != this.y) {
+                    if (await board[x][y].getStatus() == true) {
                         numberOfLivingNeighbors += 1
                     }
                 }
