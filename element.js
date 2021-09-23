@@ -53,8 +53,6 @@ class element {
                 if (x != this.x || y != this.y){
                     if (await board[x][y].getStatus() == true){
                         numberOfLivingNeighbors += 1
-                        console.log(`Checando : X: ${x}, Y: ${y}`)
-
                     }
                 }
             }

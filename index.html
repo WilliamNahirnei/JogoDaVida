@@ -21,7 +21,7 @@
 
 <script type="text/javascript" src="./element.js"></script>
 <script>
-    const SIZE = 10
+    const SIZE = 50
 
     let tabuleiro = []
     let id_global = 0
@@ -39,15 +39,11 @@
 
 
                 let celula = document.createElement("td")
-                celula.appendChild(document.createTextNode("0"))
-                celula.removeChild(celula.firstChild)
+
                 celula.appendChild(document.createTextNode("1"))
-
-
                 celula.id = id_global
                 celula.x = x
                 celula.y = y
-
                 celula.bgColor = "#F5DEB3"
 
                 celula.onClick = addEventListener('click', trabalharCelula)
@@ -75,37 +71,42 @@
         const y = cell.y
 
         tabuleiro[x][y].setStatus(!tabuleiro[x][y].status)
-        trocarCor(id,tabuleiro[x][y].status)
+        trocarCor(id, tabuleiro[x][y].status)
     }
 
-    function trocarCor(id,status){
+    function trocarCor(id, status) {
         const cell = document.getElementById(id)
         cell.bgColor = status == false ? "#F5DEB3" : "#90EE90"
     }
 
 
 
-
     async function start() {
 
-        tabuleiroAux = []
-        await tabuleiro[0][0].checkNeighbors(tabuleiro)
-        console.log(tabuleiro[0][0].getNumberOfLivingNeighbors())
+        let live = setInterval(async function () {
+            tabuleiroAux = []
+            living=false
+            for (let x = 0; x < SIZE; x++) {
+                let novaLinha = []
+                for (let y = 0; y < SIZE; y++) {
+                    await tabuleiro[x][y].checkNeighbors(tabuleiro)
+                    const newStatus = await tabuleiro[x][y].calculateNewStatus()
+                    novaLinha.push(new element(tabuleiro[x][y].id, x, y, newStatus))
+                     
+                    trocarCor(tabuleiro[x][y].id, newStatus)
 
-        for (let x = 0; x < SIZE; x++) {
-            let novaLinha = []
-            for (let y = 0; y < SIZE; y++) {
-                await tabuleiro[x][y].checkNeighbors(tabuleiro)
-                const newStatus = await tabuleiro[x][y].calculateNewStatus()
-                novaLinha.push(await new element(tabuleiro[x][y].id,x, y, newStatus))
+                    if (tabuleiro[x][y].getStatus() != newStatus)
+                        living=true
 
-                trocarCor(tabuleiro[x][y].id,newStatus)
-
-
-
+                }
+                tabuleiroAux.push(novaLinha)
             }
-            tabuleiroAux.push(novaLinha)
-        }
-        tabuleiro = tabuleiroAux
+            tabuleiro = tabuleiroAux
+            if(!living){
+                clearInterval(live)
+                alert("O jogo acabou")
+            } 
+        }, 500)
+
     }
 </script>
